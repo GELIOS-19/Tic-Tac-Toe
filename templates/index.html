@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- this script will initialize the game -->
+    <script>
+      async function initializeGame() {
+        await $.ajax({
+          url: "/game/initialize-game",
+          type: "get",
+          success: function(response) {
+            const x = "x"
+            const o = "o"
+            // response json is a readable json
+            var responseJSON = JSON.parse(JSON.stringify(response))
+            // set current player mark
+            currentPlayerMark = responseJSON.game.board.current_player.mark
+            // set board to current player turn
+            $("#board").removeClass(x).removeClass(o)
+            $("#board").addClass(currentPlayerMark)
+            // remove show class
+            $("#gameCompleted").removeClass("show")
+            // remove the classes of the cells
+            {% for cell in game.board_service.board.cells %}
+              $("#{{ cell.index }}").removeClass(x).removeClass(o)
+            {% endfor %}
+          },
+          error: function(response) {
+            alert("error")
+          }
+        })
+      }
+      initializeGame()
+    </script>
+</head>
+<body>
+<!-- board -->
+<div class="board" id="board">
+    {% for cell in game.board_service.board.cells %}
+    <div class="cell" id="{{ cell.index }}"></div>
+    <script>
+        $("#{{ cell.index }}").click(async function() {
+          // get members before object modification
+          var currentPlayerMark
+          var oppositeCurrentPlayerMark
+          var filled
+          await $.ajax({
+            url: "/game",
+            type: "get",
+            success: function(response) {
+              // response json is a readable json
+              var responseJSON = JSON.parse(JSON.stringify(response))
+              // set current player mark
+              currentPlayerMark = responseJSON.game.board.current_player.mark
+              // set opposite current player mark
+              oppositeCurrentPlayerMark = responseJSON.game.board.current_player.opposite
+              // set filled
+              filled = responseJSON.game.board.cells[{{ cell.index }}].filled
+            },
+            error: function(response) {
+              alert("error")
+            }
+          })
+          // call player turn
+          await $.ajax({
+            url: "/game/player-turn/" + "{{ cell.index }}" + "/" + currentPlayerMark,
+            type: "get",
+            success: function(response) {
+              // response json is a readable json
+              var responseJSON = JSON.parse(JSON.stringify(response))
+              if (!filled) {
+                // add mark to cell
+                $("#{{ cell.index }}").addClass(currentPlayerMark)
+                // switch mark of board
+                $("#board").removeClass(currentPlayerMark)
+                $("#board").addClass(oppositeCurrentPlayerMark)
+                // completed
+                var completed = responseJSON.game.completed
+                // check for win
+                if (completed) {
+                  // show completed screen
+                  $("#gameCompleted").addClass("show")
+                  // get winner
+                  var winner = responseJSON.game.winner.mark
+                  // set the text of the game completed 
+                  if (winner == "") {
+                    $("#gameCompletedMessage").text("Draw!")
+                  } else {
+                    $("#gameCompletedMessage").text(winner.toUpperCase() + " Wins!")
+                  }
+                }
+              }
+            },
+            error: function(response) {
+              alert("error")
+            }
+          })
+        })
+    </script>
+    {% endfor %}
+</div>
+<!-- game completed -->
+<div class="game-completed" id="gameCompleted">
+    <div game-completed-message id="gameCompletedMessage"></div>
+    <br/>
+    <button id="restart" onclick="initializeGame()">Restart</button>
+</div>
+</body>
+</html>
