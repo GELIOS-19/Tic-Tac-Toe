@@ -67,18 +67,9 @@ class BoardService:
           true_count += 1
       # set completed status and who the winner is
       if true_count == self.board_side_length:
-        return {
-          "completed": True,
-          "winner": player
-        }
+        return {"completed": True, "winner": player}
     # check for draw
     if round_count > self.total_squares - 1:
-      return {
-        "completed": True,
-        "winner": Player(Player.NULL_PLAYER)
-      }
+      return {"completed": True, "winner": Player(Player.NULL_PLAYER)}
     # return negative response if no winner
-    return {
-      "completed": False,
-      "winner": Player(Player.NULL_PLAYER)
-    }
+    return {"completed": False, "winner": Player(Player.NULL_PLAYER)}
