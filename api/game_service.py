@@ -18,15 +18,7 @@ class GameService:
   # get the status of game service
   @property
   def dictionary(self):
-    return {
-      "completed": self.completed,
-      "winner": self.winner.dictionary,
-      "round_count": self.round_count,
-      "board": {
-        "current_player": self.board_service.board.current_player.dictionary,
-        "cells": [cell.dictionary for cell in self.board_service.board.cells],
-      },
-    }
+    return {"completed": self.completed, "winner": self.winner.dictionary, "round_count": self.round_count, "board": {"current_player": self.board_service.board.current_player.dictionary, "cells": [cell.dictionary for cell in self.board_service.board.cells], }, }
 
   # create a new game
   def initialize_game(self):
