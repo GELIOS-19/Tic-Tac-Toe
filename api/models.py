@@ -43,7 +43,10 @@ class Cell:
   # custom dictionary
   @property
   def dictionary(self):
-    return {"index": self.index, "filled": self.filled, "player": self.player.dictionary, }
+    return {
+      "index": self.index,
+      "filled": self.filled,
+      "player": self.player.dictionary, }
 
 
 # board model
