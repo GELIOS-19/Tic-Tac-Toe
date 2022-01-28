@@ -63,8 +63,8 @@ class BoardService:
     for winning_position_set in self.winning_position_sets:
       # check if winning positions are equal to player positions
       conditions = [
-        self.board.cells[winning_position_set[i]].player.mark == player.mark for
-        i in range(self.board_side_length)]
+        self.board.cells[winning_position_set[i]].player.mark == player.mark
+        for i in range(self.board_side_length)]
       true_count = 0
       for condition in conditions:
         if condition:
