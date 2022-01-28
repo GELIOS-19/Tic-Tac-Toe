@@ -7,7 +7,9 @@ class BoardService:
     self.total_squares = self.board_side_length * self.board_side_length
 
     # create a new instance of a board
-    self.board = Board(cells=[Cell(index=i, player=Player(Player.NULL_PLAYER), filled=False) for i in range(self.total_squares)], current_player=Player(Player.X_PLAYER))
+    self.board = Board(cells=[
+      Cell(index=i, player=Player(Player.NULL_PLAYER), filled=False) for i in
+      range(self.total_squares)], current_player=Player(Player.X_PLAYER))
 
   @property
   def winning_position_sets(self):
@@ -60,7 +62,9 @@ class BoardService:
   def check_winner(self, player, round_count):
     for winning_position_set in self.winning_position_sets:
       # check if winning positions are equal to player positions
-      conditions = [self.board.cells[winning_position_set[i]].player.mark == player.mark for i in range(self.board_side_length)]
+      conditions = [
+        self.board.cells[winning_position_set[i]].player.mark == player.mark for
+        i in range(self.board_side_length)]
       true_count = 0
       for condition in conditions:
         if condition:
