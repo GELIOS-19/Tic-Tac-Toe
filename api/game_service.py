@@ -19,13 +19,17 @@ class GameService:
   @property
   def dictionary(self):
     return {
-      "completed": self.completed,
-      "winner": self.winner.dictionary,
-      "round_count": self.round_count,
-      "board": {
-        "current_player": self.board_service.board.current_player.dictionary,
-        "cells": [cell.dictionary for cell in
-                  self.board_service.board.cells], }, }
+        "completed": self.completed,
+        "winner": self.winner.dictionary,
+        "round_count": self.round_count,
+        "board": {
+            "current_player":
+                self.board_service.board.current_player.dictionary,
+            "cells": [
+                cell.dictionary for cell in self.board_service.board.cells
+            ],
+        },
+    }
 
   # create a new game
   def initialize_game(self):
@@ -41,12 +45,14 @@ class GameService:
       # increment round count
       self.round_count += 1
       # check winners
-      check = self.board_service.check_winner(player=Player(Player.X_PLAYER), round_count=self.round_count)
+      check = self.board_service.check_winner(player=Player(Player.X_PLAYER),
+                                              round_count=self.round_count)
       self.completed = check["completed"]
       self.winner = check["winner"]
       if self.completed:
         return
-      check = self.board_service.check_winner(player=Player(Player.O_PLAYER), round_count=self.round_count)
+      check = self.board_service.check_winner(player=Player(Player.O_PLAYER),
+                                              round_count=self.round_count)
       self.completed = check["completed"]
       self.winner = check["winner"]
       if self.completed:
