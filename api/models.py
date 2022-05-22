@@ -1,16 +1,13 @@
 from typing import List
 
 
-# player model
 class Player:
-  # constants
   X_PLAYER = "x"
   O_PLAYER = "o"
   NULL_PLAYER = ""
 
   mark: str
 
-  # custom dictionary
   @property
   def dictionary(self):
     return {"mark": self.mark, "opposite": self.opposite}
@@ -18,7 +15,6 @@ class Player:
   def __init__(self, mark):
     self.mark = mark
 
-  # returns the opposite player
   @property
   def opposite(self):
     if self.mark == self.X_PLAYER:
@@ -29,7 +25,6 @@ class Player:
       return self.NULL_PLAYER
 
 
-# cell model
 class Cell:
   index: int
   player: Player
@@ -40,16 +35,15 @@ class Cell:
     self.player = player
     self.filled = filled
 
-  # custom dictionary
   @property
   def dictionary(self):
     return {
-      "index": self.index,
-      "filled": self.filled,
-      "player": self.player.dictionary, }
+        "index": self.index,
+        "filled": self.filled,
+        "player": self.player.dictionary
+    }
 
 
-# board model
 class Board:
   cells: List[Cell]
   current_player: Player
