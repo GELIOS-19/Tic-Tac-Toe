@@ -27,8 +27,8 @@ class GameService:
                 self.board_service.board.current_player.dictionary,
             "cells": [
                 cell.dictionary for cell in self.board_service.board.cells
-            ],
-        },
+            ]
+        }
     }
 
   # create a new game
